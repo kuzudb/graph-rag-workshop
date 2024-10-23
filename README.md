@@ -12,6 +12,15 @@ The following stack is used:
 - Generation model: OpenAI GPT-4o-mini
 - Reranking: Cohere [reranker](https://docs.cohere.com/v2/reference/rerank)
 
+## Dataset
+
+The dataset used in this workshop is the [BlackRock founders dataset](./data/blackrock), which
+are three small text files containing information about the founders of the asset management firm
+BlackRock.
+
+The aim of the workshop is to show how we can build a hybrid RAG system that utilizes a graph
+database and a vector database to answer questions about the dataset.
+
 ## Setup
 
 We will be using the Python API of Kùzu and a combination of scripts that utilize the required
