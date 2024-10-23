@@ -55,12 +55,16 @@ if __name__ == "__main__":
     vector_rag = VectorRAG("./test_lancedb")
     question = "Who are the founders of BlackRock? Return the names as a numbered list."
     response = vector_rag.run(question)
-    print(response)
+    print(f"Q1: {question}\n\n{response}")
 
     question = "Where did Larry Fink graduate from?"
     response = vector_rag.run(question)
-    print(response)
+    print(f"---\nQ2: {question}\n\n{response}")
 
     question = "When were Larry Fink and Susan Wagner born?"
     response = vector_rag.run(question)
-    print(response)
+    print(f"---\nQ3: {question}\n\n{response}")
+
+    question = "How did Larry Fink and Rob Kapito meet?"
+    response = vector_rag.run(question)
+    print(f"---\nQ4: {question}\n\n{response}")

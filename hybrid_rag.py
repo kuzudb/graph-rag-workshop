@@ -58,7 +58,7 @@ class HybridRAG:
             model="rerank-english-v3.0",
             query=question,
             documents=docs,
-            top_n=5,
+            top_n=20,
             return_documents=True,
         )
         return self.hybrid_rag(question, combined_context)
@@ -68,13 +68,17 @@ if __name__ == "__main__":
     hybrid_rag = HybridRAG()
     question = "Who are the founders of BlackRock? Return the names as a numbered list."
     response = hybrid_rag.run(question)
-    print(response)
+    print(f"Q1: {question}\n\n{response}")
 
     question = "Where did Larry Fink graduate from?"
     response = hybrid_rag.run(question)
-    print(response)
+    print(f"---\nQ2: {question}\n\n{response}")
 
     question = "When were Larry Fink and Susan Wagner born?"
     response = hybrid_rag.run(question)
-    print(response)
+    print(f"---\nQ3: {question}\n\n{response}")
+
+    question = "How did Larry Fink and Rob Kapito meet?"
+    response = hybrid_rag.run(question)
+    print(f"---\nQ4: {question}\n\n{response}")
 

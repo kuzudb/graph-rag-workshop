@@ -70,7 +70,16 @@ class GraphRAG:
             item = response.get_next()
             if item not in result:
                 result.extend(item)
-        return {question: list(set(result))}
+        
+        # Handle both hashable and non-hashable types
+        if all(isinstance(x, (str, int, float, bool, tuple)) for x in result):
+            final_result = {question: list(set(result))}
+        else:
+            # For non-hashable types, we can't use set() directly
+            # Instead, we'll use a list comprehension to remove duplicates
+            final_result = {question: [x for i, x in enumerate(result) if x not in result[:i]]}
+
+        return final_result
 
     @ell.simple(model=MODEL_NAME, temperature=0.1, client=OpenAI(api_key=OPENAI_API_KEY))
     def generate_cypher(self, question: str) -> str:
@@ -125,22 +134,27 @@ class GraphRAG:
 
     def run(self, question: str) -> str:
         cypher = self.generate_cypher(question)
-        print(cypher)
+        print(f"\n{cypher}\n")
         context = self.query(question, cypher)
-        print(context)
         return self.retrieve(question, context)
 
 
 if __name__ == "__main__":
-    question = "Who are the founders of BlackRock? Return the names as a numbered list."
     graph_rag = GraphRAG("./test_kuzudb")
+    question = "Who are the founders of BlackRock? Return the names as a numbered list."
     response = graph_rag.run(question)
-    print(response)
+    print(f"Q1: {question}\n\n{response}\n---\n")
+
 
     question = "Where did Larry Fink graduate from?"
     response = graph_rag.run(question)
-    print(response)
+    print(f"Q2: {question}\n\n{response}\n---\n")
+
 
     question = "When were Larry Fink and Susan Wagner born?"
     response = graph_rag.run(question)
-    print(response)
+    print(f"Q3: {question}\n\n{response}\n---\n")
+
+    question = "How did Larry Fink and Rob Kapito meet?"
+    response = graph_rag.run(question)
+    print(f"---\nQ4: {question}\n\n{response}")
