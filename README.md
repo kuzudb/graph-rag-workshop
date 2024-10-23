@@ -157,9 +157,9 @@ The founders of BlackRock are:
 Larry Fink graduated from UCLA, where he earned a BA in political science in 1974 and an MBA in 1976.
 ```
 
-#### Q3: When were Larry Fink and Susan Wagner born?
+#### Q3: When was Susan Wagner born?
 ```
-Larry Fink was born on November 2, 1952, in Van Nuys, California. Susan Wagner's birth date is not provided in the relevant context, so I cannot provide that information.
+The relevant context does not provide information about Susan Wagner's birth date. Therefore, I cannot answer the question about when Susan Wagner was born.
 ```
 
 > [!NOTE]
@@ -197,17 +197,17 @@ Just like earlier, we'll answer the following questions using Graph RAG.
 #### Q2: Where did Larry Fink graduate from?
 
 ```
-{question: list(set(result))}
+Larry Fink graduated from UCLA.
 ```
 
 > [!NOTE]
 > Unlike vector retrieval-based RAG, the graph only stored the name of the university that Larry Fink
 > graduated from, so the LLM only has this context to answer the question as it did.
 
-#### Q3: When were Larry Fink and Susan Wagner born?
+#### Q3: When was Susan Wagner born?
 
 ```
-Larry Fink was born on May 26, 1961, and Susan Wagner was born on November 2, 1952.
+Susan Wagner was born on May 26, 1961.
 ```
 
 > [!NOTE]
@@ -251,10 +251,10 @@ The founders of BlackRock are:
 Larry Fink graduated from UCLA, where he earned both a BA in political science in 1974 and an MBA in 1976.
 ```
 
-#### Q3: When were Larry Fink and Susan Wagner born?
+#### Q3: When was Susan Wagner born?
 
 ```
-Larry Fink was born on November 2, 1952, and Susan Wagner was born on May 26, 1961.
+Susan Wagner was born on May 26, 1961.
 ```
 
 #### Q4: How did Larry Fink and Rob Kapito meet?
