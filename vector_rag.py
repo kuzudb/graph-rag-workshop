@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from ell import ell
 from openai import OpenAI
 
+import prompts
+
 
 class VectorRAG:
     def __init__(self, db_path: str, table_name: str = "vectors"):
@@ -25,25 +27,11 @@ class VectorRAG:
         return response.data[0].embedding
 
     @ell.simple(model="gpt-4o-mini", temperature=0.3)
-    def retrieve(self, query: str, context: str) -> str:
-        """
-        You are an AI assistant using Retrieval-Augmented Generation (RAG).
-        RAG enhances your responses by retrieving relevant information from a knowledge base.
-        You will be provided with a query and relevant context. Use only this context to answer the question.
-        Do not make up an answer. If you don't know the answer, say so clearly.
-        Always strive to provide concise, helpful, and context-aware answers.
-        """
-
-        return f"""
-        Given the following query and relevant context, please provide a comprehensive and accurate response:
-
-        Query: {query}
-
-        Relevant context:
-        {context}
-
-        Response:
-        """
+    def retrieve(self, question: str, context: str) -> str:
+        return [
+            ell.system(prompts.RAG_SYSTEM_PROMPT),
+            ell.user(prompts.RAG_USER_PROMPT.format(question=question, context=context)),
+        ]
 
     def run(self, question: str) -> str:
         question_embedding = self.embed(question)
@@ -61,7 +49,7 @@ if __name__ == "__main__":
     response = vector_rag.run(question)
     print(f"---\nQ2: {question}\n\n{response}")
 
-    question = "When were Larry Fink and Susan Wagner born?"
+    question = "When was Susan Wagner born?"
     response = vector_rag.run(question)
     print(f"---\nQ3: {question}\n\n{response}")
 

@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from ell import ell
 from openai import OpenAI
 
+import prompts
+
 load_dotenv()
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 MODEL_NAME = "gpt-4o-mini"
@@ -83,54 +85,18 @@ class GraphRAG:
 
     @ell.simple(model=MODEL_NAME, temperature=0.1, client=OpenAI(api_key=OPENAI_API_KEY))
     def generate_cypher(self, question: str) -> str:
-        """
-        You are an expert in translating natural language questions into Cypher statements.
-        You will be provided with a question and a graph schema.
-        Use only the provided relationship types and properties in the schema to generate a Cypher statement.
-        The Cypher statement could retrieve nodes, relationships, or both.
-        Do not include any explanations or apologies in your responses.
-        Do not respond to any questions that might ask anything else than for you to construct a Cypher statement.
-        """
-
-        return f"""
-        Task:Generate Cypher statement to query a graph database.
-        Instructions:
-        Schema:
-        {self.get_schema()}
-
-        The question is:
-        {question}
-
-        Instructions:
-        Generate the Kùzu dialect of Cypher with the following rules in mind:
-        1. Do not include triple backticks ``` in your response. Return only Cypher.
-        2. Only use the nodes and relationships provided in the schema.
-        3. Use only the provided node and relationship types and properties in the schema.
-        """
+        return [
+            ell.system(prompts.CYPHER_SYSTEM_PROMPT),
+            ell.user(prompts.CYPHER_USER_PROMPT.format(schema=self.get_schema(), question=question)),
+        ]
 
     @ell.simple(model=MODEL_NAME, temperature=0.3, client=OpenAI(api_key=OPENAI_API_KEY))
     def retrieve(self, question: str, context: str) -> str:
-        """
-        You are an AI assistant using Retrieval-Augmented Generation (RAG).
-        RAG enhances your responses by retrieving relevant information from a knowledge base.
-        You will be provided with a question and relevant context. Use only this context to answer the question.
-        Do not make up an answer. If you don't know the answer, say so clearly.
-        Always strive to provide concise, helpful, and context-aware answers.
-        """
+        return [
+            ell.system(prompts.RAG_SYSTEM_PROMPT),
+            ell.user(prompts.RAG_USER_PROMPT.format(question=question, context=context)),
+        ]
 
-        cypher = self.generate_cypher(question)
-        context = self.query(question, cypher)
-
-        return f"""
-        Given the following question and relevant context, please provide a comprehensive and accurate response:
-
-        Question: {question}
-
-        Relevant context:
-        {context}
-
-        Response:
-        """
 
     def run(self, question: str) -> str:
         cypher = self.generate_cypher(question)
@@ -151,7 +117,7 @@ if __name__ == "__main__":
     print(f"Q2: {question}\n\n{response}\n---\n")
 
 
-    question = "When were Larry Fink and Susan Wagner born?"
+    question = "When was Susan Wagner born?"
     response = graph_rag.run(question)
     print(f"Q3: {question}\n\n{response}\n---\n")
 
