@@ -23,7 +23,7 @@ class HybridRAG:
         self.co = cohere.ClientV2(COHERE_API_KEY)
         self.openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
-    @ell.simple(model=MODEL_NAME, temperature=0.3)
+    @ell.simple(model=MODEL_NAME, temperature=0.3, seed=42)
     def hybrid_rag(self, question: str, context: str) -> str:
         return [
             ell.system(prompts.RAG_SYSTEM_PROMPT),

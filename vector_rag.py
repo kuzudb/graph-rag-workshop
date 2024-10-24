@@ -26,7 +26,7 @@ class VectorRAG:
         response = self.openai_client.embeddings.create(model="text-embedding-3-small", input=query)
         return response.data[0].embedding
 
-    @ell.simple(model="gpt-4o-mini", temperature=0.3)
+    @ell.simple(model="gpt-4o-mini", temperature=0.3, seed=42)
     def retrieve(self, question: str, context: str) -> str:
         return [
             ell.system(prompts.RAG_SYSTEM_PROMPT),

@@ -10,6 +10,7 @@ import prompts
 load_dotenv()
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 MODEL_NAME = "gpt-4o-mini"
+SEED = 42
 
 
 class GraphRAG:
@@ -83,14 +84,14 @@ class GraphRAG:
 
         return final_result
 
-    @ell.simple(model=MODEL_NAME, temperature=0.1, client=OpenAI(api_key=OPENAI_API_KEY))
+    @ell.simple(model=MODEL_NAME, temperature=0.1, client=OpenAI(api_key=OPENAI_API_KEY), seed=SEED)
     def generate_cypher(self, question: str) -> str:
         return [
             ell.system(prompts.CYPHER_SYSTEM_PROMPT),
             ell.user(prompts.CYPHER_USER_PROMPT.format(schema=self.get_schema(), question=question)),
         ]
 
-    @ell.simple(model=MODEL_NAME, temperature=0.3, client=OpenAI(api_key=OPENAI_API_KEY))
+    @ell.simple(model=MODEL_NAME, temperature=0.3, client=OpenAI(api_key=OPENAI_API_KEY), seed=SEED)
     def retrieve(self, question: str, context: str) -> str:
         return [
             ell.system(prompts.RAG_SYSTEM_PROMPT),
