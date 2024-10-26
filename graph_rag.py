@@ -73,7 +73,7 @@ class GraphRAG:
             item = response.get_next()
             if item not in result:
                 result.extend(item)
-        
+
         # Handle both hashable and non-hashable types
         if all(isinstance(x, (str, int, float, bool, tuple)) for x in result):
             final_result = {question: list(set(result))}
@@ -88,7 +88,9 @@ class GraphRAG:
     def generate_cypher(self, question: str) -> str:
         return [
             ell.system(prompts.CYPHER_SYSTEM_PROMPT),
-            ell.user(prompts.CYPHER_USER_PROMPT.format(schema=self.get_schema(), question=question)),
+            ell.user(
+                prompts.CYPHER_USER_PROMPT.format(schema=self.get_schema(), question=question)
+            ),
         ]
 
     @ell.simple(model=MODEL_NAME, temperature=0.3, client=OpenAI(api_key=OPENAI_API_KEY), seed=SEED)
@@ -97,7 +99,6 @@ class GraphRAG:
             ell.system(prompts.RAG_SYSTEM_PROMPT),
             ell.user(prompts.RAG_USER_PROMPT.format(question=question, context=context)),
         ]
-
 
     def run(self, question: str) -> str:
         cypher = self.generate_cypher(question)
@@ -112,11 +113,9 @@ if __name__ == "__main__":
     response = graph_rag.run(question)
     print(f"Q1: {question}\n\n{response}\n---\n")
 
-
     question = "Where did Larry Fink graduate from?"
     response = graph_rag.run(question)
     print(f"Q2: {question}\n\n{response}\n---\n")
-
 
     question = "When was Susan Wagner born?"
     response = graph_rag.run(question)

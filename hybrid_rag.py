@@ -5,25 +5,28 @@ from dotenv import load_dotenv
 from ell import ell
 from openai import OpenAI
 
+import prompts
 from graph_rag import GraphRAG
 from vector_rag import VectorRAG
-
-import prompts
 
 load_dotenv()
 MODEL_NAME = "gpt-4o-mini"
 COHERE_API_KEY = os.environ.get("COHERE_API_KEY")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+SEED = 42
 
 
 class HybridRAG:
-    def __init__(self, graph_db_path="./test_kuzudb", vector_db_path="./test_lancedb"):
+    def __init__(
+        self,
+        graph_db_path="./test_kuzudb",
+        vector_db_path="./test_lancedb",
+    ):
         self.graph_rag = GraphRAG(graph_db_path)
         self.vector_rag = VectorRAG(vector_db_path)
         self.co = cohere.ClientV2(COHERE_API_KEY)
-        self.openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
-    @ell.simple(model=MODEL_NAME, temperature=0.3, seed=42)
+    @ell.simple(model=MODEL_NAME, temperature=0.3, client=OpenAI(api_key=OPENAI_API_KEY), seed=SEED)
     def hybrid_rag(self, question: str, context: str) -> str:
         return [
             ell.system(prompts.RAG_SYSTEM_PROMPT),
@@ -53,7 +56,10 @@ class HybridRAG:
 
 
 if __name__ == "__main__":
-    hybrid_rag = HybridRAG()
+    hybrid_rag = HybridRAG(
+        graph_db_path="./test_kuzudb",
+        vector_db_path="./test_lancedb"
+    )
     question = "Who are the founders of BlackRock? Return the names as a numbered list."
     response = hybrid_rag.run(question)
     print(f"Q1: {question}\n\n{response}")
@@ -69,4 +75,3 @@ if __name__ == "__main__":
     question = "How did Larry Fink and Rob Kapito meet?"
     response = hybrid_rag.run(question)
     print(f"---\nQ4: {question}\n\n{response}")
-

@@ -7,11 +7,16 @@ from openai import OpenAI
 
 import prompts
 
+load_dotenv()
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+MODEL_NAME = "gpt-4o-mini"
+SEED = 42
+
 
 class VectorRAG:
     def __init__(self, db_path: str, table_name: str = "vectors"):
         load_dotenv()
-        self.openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        self.openai_client = OpenAI(api_key=OPENAI_API_KEY)
         self.db = lancedb.connect(db_path)
         self.table = self.db.open_table(table_name)
 
@@ -26,7 +31,7 @@ class VectorRAG:
         response = self.openai_client.embeddings.create(model="text-embedding-3-small", input=query)
         return response.data[0].embedding
 
-    @ell.simple(model="gpt-4o-mini", temperature=0.3, seed=42)
+    @ell.simple(model=MODEL_NAME, temperature=0.3, client=OpenAI(api_key=OPENAI_API_KEY), seed=SEED)
     def retrieve(self, question: str, context: str) -> str:
         return [
             ell.system(prompts.RAG_SYSTEM_PROMPT),
