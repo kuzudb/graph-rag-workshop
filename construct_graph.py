@@ -5,12 +5,11 @@ from typing import Literal
 import nest_asyncio
 import kuzu
 import openai
-from llama_index.core import SimpleDirectoryReader, Settings, VectorStoreIndex, PropertyGraphIndex
+from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, PropertyGraphIndex
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.llms.openai import OpenAI
 from llama_index.core.ingestion import IngestionPipeline
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.vector_stores.lancedb import LanceDBVectorStore
 from llama_index.core.indices.property_graph import SchemaLLMPathExtractor
 from llama_index.graph_stores.kuzu import KuzuPropertyGraphStore
