@@ -1,6 +1,6 @@
-# GDG Surrey DevFest 2024 Workshop
+# Graph RAG and Hybrid RAG Workshop
 
-Code for the Google Developer Group Surrey's DevFest 2024 workshop on Graph RAG and Hybrid RAG.
+Workshop on showing the benefits of Graph RAG and its combination with Vector RAG (Hybrid RAG).
 
 The following stack is used:
 
@@ -282,7 +282,8 @@ contained the answer but the raw text didn't, hybrid RAG was able to rerank the 
 graph and vector search in way that on average, provided relevant responses.
 
 Note that the hybrid RAG system is not perfect. If the information is not present (either explicitly
-or implicitly in the text), it cannot provide an answer to the question.
+or implicitly in the text), it cannot provide an answer to the question because the LLM cannot
+reason over the required information to formulate a response.
 
 The key takeaways are:
 - Graphs can be a helpful tool for factual (extractive) question-answering tasks in RAG
@@ -292,4 +293,4 @@ information is not explicitly stated in the exact words of the question
 RAG, the quality of the graph (entities and relationships) is crucial to the quality of the responses
 generated
 
-Feel free to fork this repo and try out the workflow on your own datasets!
+Feel free to clone/fork this repo and try out the workflow on your own datasets!
