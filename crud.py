@@ -18,7 +18,7 @@ from llama_index.vector_stores.lancedb import LanceDBVectorStore
 
 # Load environment variables
 load_dotenv()
-SEED = 32457
+SEED = 42
 nest_asyncio.apply()
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
@@ -109,7 +109,7 @@ kg_index = PropertyGraphIndex.from_documents(
     show_progress=True,
 )
 
-# Step 3: Augment the graph with external knowledge
+# Step 3: Augment the graph with external knowledge and fix erroneous relationships
 
 # Say we have this knowledge obtained from other sources about additional founders of BlackRock
 additional_founders = [
@@ -129,7 +129,7 @@ for founder in additional_founders:
         """
         MATCH (o:ORGANIZATION {id: "BlackRock"})
         MERGE (p:PERSON {id: $name, name: $name})
-        MERGE (p)-[r:LINKS_PERSON_ORGANIZATION]->(o)
+        MERGE (p)-[r:LINKS]->(o)
         SET r.label = "IS_FOUNDER_OF"
         """,
         parameters={"name": founder},

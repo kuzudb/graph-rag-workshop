@@ -49,7 +49,7 @@ following command:
 uv sync
 
 # Run scripts
-uv run construct_graph.py
+uv run crud.py
 uv run graph_rag.py
 uv run vector_rag.py
 uv run hybrid_rag.py
@@ -69,7 +69,7 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 
 # Run scripts
-python construct_graph.py
+python crud.py
 python graph_rag.py
 python vector_rag.py
 python hybrid_rag.py
@@ -79,14 +79,14 @@ python hybrid_rag.py
 
 ### 1. Construct the graph
 
-The script `construct_graph.py` extracts entities and relationships from the provided
+The script `crud.py` extracts entities and relationships from the provided
 [BlackRock founders dataset](./data/blackrock) and constructs a graph that is stored in Kùzu.
 
 ```bash
-uv run construct_graph.py
+uv run crud.py
 ```
 
-The script `construct_graph.py` does the following:
+The script `crud.py` does the following:
 - Chunk the text, generate embeddings, and stores the embeddings in a [LanceDB](https://lancedb.com/),
 an embedded vector database
 - Use the LlamaIndex framework and its
